@@ -1,0 +1,21 @@
+/* Small UI helpers to match Figma spacing and typography */
+
+:root {
+  --sidebar-bg: #ffffff;
+  --muted: #717182;
+}
+
+/* Card */
+.card {
+  background: var(--card-bg, #fff);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 12px;
+}
+
+/* Utility to center placeholders */
+.placeholder-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9aa0a6;
+}
