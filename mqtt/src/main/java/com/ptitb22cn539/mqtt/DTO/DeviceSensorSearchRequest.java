@@ -24,5 +24,5 @@ public class DeviceSensorSearchRequest {
     String dateTime;
     String type;
     Float value;
-    private String sort;
+    String sort;
 }

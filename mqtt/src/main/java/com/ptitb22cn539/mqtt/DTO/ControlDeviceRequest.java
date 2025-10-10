@@ -10,6 +10,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,13 +19,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class DataHistorySearchRequest {
-    @Builder.Default
-    Integer page = 1;
-    @Builder.Default
-    Integer limit = 10;
-    String dateTime;
-    String deviceName;
-    String sort;
+public class ControlDeviceRequest implements Serializable {
+    String requestId;
     DeviceStatus status;
 }

@@ -24,7 +24,7 @@ export default function SearchValueInputComponent({
 				defaultValue={defaultValue}
 				disabled={disabled}
 				placeholder={`Tìm kiếm theo ${keyname}...`}
-				className="flex-1"
+				width={500}
 				onKeyDown={handleKeyDown}
 			/>
 		</>

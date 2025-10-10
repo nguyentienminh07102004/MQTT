@@ -6,7 +6,6 @@ import com.ptitb22cn539.mqtt.Entity.DeviceHistoryEntity;
 import com.ptitb22cn539.mqtt.Entity.DeviceSensorEntity;
 import com.ptitb22cn539.mqtt.Service.MqttService;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.data.web.PagedModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.CompletableFuture;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1")
@@ -22,8 +23,8 @@ public class MqttController {
     private final MqttService mqttService;
 
     @PostMapping(value = "/{deviceName}/{status}")
-    public void turnOnOffDevice(@PathVariable String deviceName, @PathVariable String status) throws MqttException {
-        this.mqttService.turnOnOffDevice(deviceName, status);
+    public CompletableFuture<Void> turnOnOffDevice(@PathVariable String deviceName, @PathVariable String status) throws Exception {
+        return this.mqttService.turnOnOffDevice(deviceName, status);
     }
 
     @GetMapping(value = "/sensors")

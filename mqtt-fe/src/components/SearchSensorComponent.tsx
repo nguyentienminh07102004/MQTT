@@ -58,6 +58,12 @@ export default function SearchSensorComponent() {
 					<Select defaultValue="" style={{ width: 160 }} value={sort} onChange={(value) => setSort(value as Sort)}>
 						<Option value="createdDate-Asc">Thời gian tăng dần</Option>
 						<Option value="createdDate-Desc">Thời gian giảm dần</Option>
+						<Option value="temperature-Asc">Nhiệt độ tăng dần</Option>
+						<Option value="temperature-Desc">Nhiệt độ giảm dần</Option>
+						<Option value="humidity-Asc">Độ ẩm tăng dần</Option>
+						<Option value="humidity-Desc">Độ ẩm giảm dần</Option>
+						<Option value="brightness-Asc">Ánh sáng tăng dần</Option>
+						<Option value="brightness-Desc">Ánh sáng giảm dần</Option>
 					</Select>
 				</Space>
 			</div>

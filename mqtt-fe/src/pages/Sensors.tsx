@@ -8,6 +8,7 @@ import { useSearchParams } from "react-router";
 import SearchSensorComponent from "../components/SearchSensorComponent";
 import type { PagedModel } from "./History";
 import type { SensorData } from "../components/LineMultiChart";
+import { API_BASE_URL } from "../configuration/App.constant";
 
 const columns: ColumnsType<SensorData> = [
 	{ title: "ID", key: "id", render: (_, __, index) => index + 1 },
@@ -46,16 +47,14 @@ const Sensors = () => {
 		page: { totalElements: 0, totalPages: 0, number: 1, size: 10 },
 	});
 	const fetchData = async () => {
-		let url = `http://localhost:8080/api/v1/sensors?page=${page}&limit=${limit}`;
+		let url = `${API_BASE_URL}/sensors?page=${page}&limit=${limit}`;
 		const dateTime = urlSearchParams.get("dateTime");
 		const sensorType = urlSearchParams.get("sensorType");
 		const sort = urlSearchParams.get("sort");
-		const valueFrom = urlSearchParams.get("valueFrom");
-		const valueTo = urlSearchParams.get("valueTo");
-		if (valueFrom) url = `${url}&valueFrom=${valueFrom}`;
-		if (valueTo) url = `${url}&valueTo=${valueTo}`;
+		const value = urlSearchParams.get("value");
+		if (value) url = `${url}&value=${value}`;
 		if (sort) url = `${url}&sort=${sort}`;
-		if (sensorType) url = `${url}&type=${sensorType.toUpperCase()}`;
+		if (sensorType) url = `${url}&type=${sensorType}`;
 		if (dateTime) url = `${url}&dateTime=${dateTime}`;
 		const response: PagedModel<SensorData> = await (await fetch(url)).json();
 		setData(response);

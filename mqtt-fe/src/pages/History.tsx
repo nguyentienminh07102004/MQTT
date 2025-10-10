@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import React from "react";
 import { useSearchParams } from "react-router";
 import SearchHistoryComponent from "../components/SearchHistoryComponent";
+import { API_BASE_URL } from "../configuration/App.constant";
 
 enum Status {
 	ON = "on",
@@ -40,6 +41,7 @@ const columns: ColumnsType<Device> = [
 		title: "Thiết bị",
 		dataIndex: "deviceName",
 		key: "device",
+		render: (deviceName: string) => <span className="text-center w-full">{deviceName.toLowerCase()}</span>,
 	},
 	{
 		title: "Hành động",
@@ -80,9 +82,11 @@ const History = () => {
 		},
 	});
 	const fetchData = async () => {
-		let url = `http://localhost:8080/api/v1/histories?page=${page}&limit=${limit}`;
+		let url = `${API_BASE_URL}/histories?page=${page}&limit=${limit}`;
 		const dateTime = urlSearchParams.get("dateTime");
 		const deviceName = urlSearchParams.get("deviceName");
+		const status = urlSearchParams.get("status");
+		if (status) url = `${url}&status=${status}`;
 		if (dateTime) url = `${url}&dateTime=${dateTime}`;
 		if (deviceName) url = `${url}&deviceName=${deviceName}`;
 		const res = await fetch(url);

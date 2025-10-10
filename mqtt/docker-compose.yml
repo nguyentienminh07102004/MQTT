@@ -23,20 +23,7 @@ services:
     ports:
       - "5432:5432"
     restart: unless-stopped
-  pgadmin:
-    container_name: mqtt_pgadmin
-    image: dpage/pgadmin4:2025-06-27-2
-    restart: unless-stopped
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin@gmail.com}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-123}
-      PGADMIN_CONFIG_SERVER_MODE: "True"
-    ports:
-      - "5500:80"
-    volumes:
-      - pgadmin:/var/lib/pgadmin
 volumes:
-  pgadmin:
   postgres:
   log:
   data:

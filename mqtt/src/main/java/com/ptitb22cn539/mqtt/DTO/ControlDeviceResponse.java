@@ -1,6 +1,5 @@
 package com.ptitb22cn539.mqtt.DTO;
 
-import com.ptitb22cn539.mqtt.Configuration.Enum.DeviceStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,13 +16,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class DataHistorySearchRequest {
-    @Builder.Default
-    Integer page = 1;
-    @Builder.Default
-    Integer limit = 10;
-    String dateTime;
-    String deviceName;
-    String sort;
-    DeviceStatus status;
+public class ControlDeviceResponse {
+    String id;
 }

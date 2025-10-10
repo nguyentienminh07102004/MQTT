@@ -18,7 +18,7 @@ const Profile = () => {
 						<Button
 							type="primary"
 							className="mt-4"
-							href="https://github.com/nguyentienminh07102004"
+							href="https://github.com/nguyentienminh07102004/MQTT"
 							target="_blank"
 							rel="noopener noreferrer"
 							icon={<GithubOutlined />}
@@ -29,7 +29,7 @@ const Profile = () => {
 							color="danger"
 							type="default"
 							className="mt-4"
-							href="https://github.com/nguyentienminh07102004"
+							href="https://drive.google.com/file/d/1b67mHPlRMGWqF5YIx09bv-NYVbBsVsM1/view?usp=drive_link"
 							target="_blank"
 							rel="noopener noreferrer"
 							icon={<FilePdfOutlined />}

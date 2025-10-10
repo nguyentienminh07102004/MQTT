@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum DeviceStatus {
-    ON("on"),
-    OFF("off")
+    on("on"),
+    off("off")
     ;
     private final String value;
 }

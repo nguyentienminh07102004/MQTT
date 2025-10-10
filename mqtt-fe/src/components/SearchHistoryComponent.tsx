@@ -7,10 +7,12 @@ export default function SearchHistoryComponent() {
 	const { Option } = Select;
 	type DeviceName = "led" | "fan" | "air_conditioner" | "";
 	type Sort = "createdDate-Asc" | "createdDate-Desc";
+	type Status = "status-on" | "status-off" | "";
 	const [deviceName, setDeviceName] = React.useState<DeviceName>("");
 	const [dateTime, setDateTime] = React.useState<string>("");
 	const [urlSearchParams, setUrlSearchParams] = useSearchParams(window.location.search);
 	const [sort, setSort] = React.useState<Sort>("createdDate-Asc");
+	const [status, setStatus] = React.useState<Status>("");
 
 	React.useEffect(() => {
 		const deviceName = urlSearchParams.get("deviceName");
@@ -19,6 +21,7 @@ export default function SearchHistoryComponent() {
 		else setSort("createdDate-Asc");
 		if (deviceName) setDeviceName(deviceName as DeviceName);
 		if (dateTime) setDateTime(dateTime);
+		if (status) setStatus(status as Status);
 	}, []);
 	React.useEffect(() => {
 		if (deviceName) urlSearchParams.set("deviceName", deviceName);
@@ -27,8 +30,10 @@ export default function SearchHistoryComponent() {
 		else urlSearchParams.delete("dateTime");
 		if (sort) urlSearchParams.set("sort", sort);
 		else urlSearchParams.delete("sort");
+		if (status) urlSearchParams.set("status", status);
+		else urlSearchParams.delete("status");
 		setUrlSearchParams(urlSearchParams);
-	}, [dateTime, deviceName, sort]);
+	}, [dateTime, deviceName, sort, status]);
 	return (
 		<>
 			<div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
@@ -45,9 +50,14 @@ export default function SearchHistoryComponent() {
 						<Option value="fan">Quạt</Option>
 						<Option value="air_conditioner">Điều hoà</Option>
 					</Select>
-					<Select defaultValue="" style={{ width: 160 }} value={sort} onChange={(value) => setSort(value as Sort)}>
+					<Select style={{ width: 200 }} value={sort} onChange={(value) => setSort(value as Sort)}>
 						<Option value="createdDate-Asc">Thời gian tăng dần</Option>
 						<Option value="createdDate-Desc">Thời gian giảm dần</Option>
+					</Select>
+					<Select style={{ width: 160 }} value={status} onChange={(value) => setStatus(value as Status)}>
+						<Option value="">Tất cả trạng thái</Option>
+						<Option value="on">Trạng thái bật</Option>
+						<Option value="off">Trạng thái tắt</Option>
 					</Select>
 				</Space>
 			</div>

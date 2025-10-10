@@ -4,14 +4,20 @@ import DeviceControl from "../components/DeviceControl";
 import LineMultiChart, { type SensorData } from "../components/LineMultiChart";
 import SensorCard from "../components/SensorCard";
 import SocketIOConfiguration from "../configuration/SocketIOConfiguration";
+import { API_BASE_URL } from "../configuration/App.constant";
 
-const toggleDevice = async (device: string, status: boolean, onToggle: () => void) => {
-	try {
-		await fetch(`http://localhost:8080/api/v1/${device}/${status ? "OFF" : "ON"}`, { method: "POST" });
-		onToggle();
-	} catch (error) {
-		console.error("Error toggling LED:", error);
-	}
+const toggleDevice = (device: string, status: boolean, onToggle: () => void, setLoading: () => void) => {
+	setLoading();
+	fetch(`${API_BASE_URL}/${device}/${status ? "OFF" : "ON"}`, { method: "POST" })
+		.then((res) => {
+			if (!res.ok) throw new Error("Failed to toggle device");
+			console.log("Toggled", device, status ? "OFF" : "ON");
+			onToggle();
+			setLoading();
+		})
+		.catch(() => {
+			setLoading();
+		});
 };
 
 const Home = () => {
@@ -31,19 +37,16 @@ const Home = () => {
 	};
 	React.useEffect(() => {
 		socket.on("topic/sendData", handleData);
-		return () => {
-			socket.off("topic/sendData", handleData);
-		};
 	}, []);
 	React.useEffect(() => {
 		Promise.all([
-			fetch("http://localhost:8080/api/v1/last/led").then((res) => res.json()),
-			fetch("http://localhost:8080/api/v1/last/fan").then((res) => res.json()),
-			fetch("http://localhost:8080/api/v1/last/air_conditioner").then((res) => res.json()),
+			fetch(`${API_BASE_URL}/last/led`).then((res) => res.json()),
+			fetch(`${API_BASE_URL}/last/fan`).then((res) => res.json()),
+			fetch(`${API_BASE_URL}/last/air_conditioner`).then((res) => res.json()),
 		]).then(([ledRes, fanRes, acRes]) => {
-			setLedStatus(ledRes.status === "ON");
-			setFanStatus(fanRes.status === "ON");
-			setAcStatus(acRes.status === "ON");
+			setLedStatus(ledRes.status.toUpperCase() === "ON");
+			setFanStatus(fanRes.status.toUpperCase() === "ON");
+			setAcStatus(acRes.status.toUpperCase() === "ON");
 		});
 	}, []);
 	return (
@@ -75,17 +78,19 @@ const Home = () => {
 				<DeviceControl
 					deviceName="Đèn"
 					status={ledStatus}
-					onToggle={() => toggleDevice("led", ledStatus, () => setLedStatus(!ledStatus))}
+					onToggle={(setLoading: () => void) => toggleDevice("led", ledStatus, () => setLedStatus(!ledStatus), setLoading)}
 				/>
 				<DeviceControl
 					deviceName="Quạt"
 					status={fanStatus}
-					onToggle={() => toggleDevice("fan", fanStatus, () => setFanStatus(!fanStatus))}
+					onToggle={(setLoading: () => void) => toggleDevice("fan", fanStatus, () => setFanStatus(!fanStatus), setLoading)}
 				/>
 				<DeviceControl
 					deviceName="Điều hoà"
 					status={acStatus}
-					onToggle={() => toggleDevice("air_conditioner", acStatus, () => setAcStatus(!acStatus))}
+					onToggle={(setLoading: () => void) =>
+						toggleDevice("air_conditioner", acStatus, () => setAcStatus(!acStatus), setLoading)
+					}
 				/>
 			</div>
 
