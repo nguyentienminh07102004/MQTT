@@ -1,5 +1,6 @@
 package com.ptitb22cn539.mqtt.Controller;
 
+import com.ptitb22cn539.mqtt.DTO.DataHistoryCountResponse;
 import com.ptitb22cn539.mqtt.DTO.DataHistorySearchRequest;
 import com.ptitb22cn539.mqtt.DTO.DeviceSensorSearchRequest;
 import com.ptitb22cn539.mqtt.Entity.DeviceHistoryEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.CompletableFuture;
@@ -40,5 +42,16 @@ public class MqttController {
     @GetMapping(value = "/last/{deviceName}")
     public DeviceHistoryEntity getLastDevice(@PathVariable String deviceName) {
         return this.mqttService.getLastDeviceHistory(deviceName);
+    }
+
+    @GetMapping(value = "/count/{deviceName}")
+    public Long countDeviceHistory(@PathVariable String deviceName) {
+        return this.mqttService.countDeviceHistory(deviceName);
+    }
+
+    @GetMapping(value = "/count-histories")
+    public DataHistoryCountResponse searchDataHistoryCount(@RequestParam(required = false) String createdDateCount,
+                                                           @RequestParam String deviceName) {
+        return this.mqttService.searchCountDeviceHistory(createdDateCount, deviceName);
     }
 }

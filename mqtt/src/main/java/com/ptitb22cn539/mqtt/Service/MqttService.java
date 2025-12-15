@@ -5,6 +5,8 @@ import com.ptitb22cn539.mqtt.Configuration.AppConstants;
 import com.ptitb22cn539.mqtt.Configuration.Enum.DeviceStatus;
 import com.ptitb22cn539.mqtt.DTO.ControlDeviceRequest;
 import com.ptitb22cn539.mqtt.DTO.ControlDeviceResponse;
+import com.ptitb22cn539.mqtt.DTO.DataHistoryCountResponse;
+import com.ptitb22cn539.mqtt.DTO.DataHistoryResponse;
 import com.ptitb22cn539.mqtt.DTO.DataHistorySearchRequest;
 import com.ptitb22cn539.mqtt.DTO.DeviceSensorSearchRequest;
 import com.ptitb22cn539.mqtt.Entity.DeviceHistoryEntity;
@@ -32,9 +34,11 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -76,6 +80,12 @@ public class MqttService {
         } else if (deviceName.equalsIgnoreCase(AppConstants.AIR_CONDITIONER)) {
             device = AppConstants.AIR_CONDITIONER;
             topic = AppConstants.TOPIC_AIR_CONDITIONER;
+        } else if (deviceName.equalsIgnoreCase(AppConstants.RING)) {
+            device = AppConstants.RING;
+            topic = AppConstants.TOPIC_RING;
+        } else if (deviceName.equalsIgnoreCase(AppConstants.DOOR)) {
+            device = AppConstants.DOOR;
+            topic = AppConstants.TOPIC_DOOR;
         }
         final String Device = device;
         if (!StringUtils.hasText(status)) status = DeviceStatus.on.getValue();
@@ -176,5 +186,30 @@ public class MqttService {
 
     public DeviceHistoryEntity getLastDeviceHistory(String deviceName) {
         return this.deviceHistoryRepository.findLatestByDeviceName(deviceName);
+    }
+
+    public Long countDeviceHistory(String deviceName) {
+        return this.deviceHistoryRepository.countByDeviceNameIgnoreCase(deviceName);
+    }
+
+    public DataHistoryCountResponse searchCountDeviceHistory(String createdDate, String deviceName) {
+        Pair<LocalDateTime, LocalDateTime> time = this.parseStringLocalDateTime(createdDate);
+        LocalDateTime startDate = null;
+        LocalDateTime endDate = null;
+        if (time != null) {
+            startDate = time.getFirst();
+            endDate = time.getSecond();
+        }
+        List<DataHistoryResponse> openCount = this.deviceHistoryRepository.searchCountByDeviceNameAndCreatedDate(startDate, endDate, "on", deviceName);
+        List<DataHistoryResponse> closeCount = this.deviceHistoryRepository.searchCountByDeviceNameAndCreatedDate(startDate, endDate, "off", deviceName);
+        long openCountNums = 0;
+        long closeCountNums = 0;
+        if (!openCount.isEmpty()) openCountNums = openCount.get(0).getCount();
+        if (!closeCount.isEmpty()) closeCountNums = closeCount.get(0).getCount();
+        Date createdDateCount = null;
+        if (startDate != null) {
+            createdDateCount = Date.valueOf(startDate.toLocalDate());
+        }
+        return new DataHistoryCountResponse(createdDateCount, openCountNums, closeCountNums, deviceName);
     }
 }
