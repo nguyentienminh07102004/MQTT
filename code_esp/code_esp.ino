@@ -10,13 +10,15 @@
 #define LEDPIN 5
 #define FANPIN 16
 #define AIR_CONDITIONERPIN 17
+#define RING 18
+#define DOOR 19
 
 // WiFi Config
 const char* WIFI_SSID = "Minh";
 const char* WIFI_PASS = "123456789";
 
 // MQTT Config
-const char* MQTT_SERVER = "10.44.152.251";
+const char* MQTT_SERVER = "10.109.180.251";
 const int MQTT_PORT = 1883;
 const char* username = "user1";
 const char* password = "123";
@@ -24,6 +26,8 @@ const int qos = 1;
 const String topicLed = "esp32/led";
 const String topicFan = "esp32/fan";
 const String topicAirConditioner = "esp32/air_conditioner";
+const String topicRing = "esp32/ring";
+const String topicDoor = "esp32/door";
 const String topicInitDevice = "initDevice";
 const String topicSetupDevice = "setupDevice";
 
@@ -53,6 +57,10 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
       digitalWrite(FANPIN, status == "off" ? LOW : HIGH);
     } else if (topicStr == topicAirConditioner) {
       digitalWrite(AIR_CONDITIONERPIN, status == "off" ? LOW : HIGH);
+    } else if (topicStr == topicRing) {
+      digitalWrite(RING, status == "off" ? LOW : HIGH);
+    } else if (topicStr == topicDoor) {
+      digitalWrite(DOOR, status == "off" ? LOW : HIGH);
     }
     String requestId = dataReceive["requestId"];
     if (requestId != NULL) {
@@ -93,6 +101,8 @@ void setup() {
       mqttClient.subscribe(topicLed.c_str(), qos);
       mqttClient.subscribe(topicFan.c_str(), qos);
       mqttClient.subscribe(topicAirConditioner.c_str(), qos);
+      mqttClient.subscribe(topicRing.c_str(), qos);
+      mqttClient.subscribe(topicDoor.c_str(), qos);
       mqttClient.subscribe(topicInitDevice.c_str(), qos);
     } else {
       Serial.print("Thất bại, lỗi: ");
@@ -104,6 +114,8 @@ void setup() {
   pinMode(LEDPIN, OUTPUT);
   pinMode(FANPIN, OUTPUT);
   pinMode(AIR_CONDITIONERPIN, OUTPUT);
+  pinMode(RING, OUTPUT);
+  pinMode(DOOR, OUTPUT);
 
   mqttClient.publish(topicSetupDevice.c_str(), NULL);
   // cấu hình bh1750

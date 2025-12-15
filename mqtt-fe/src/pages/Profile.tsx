@@ -29,7 +29,7 @@ const Profile = () => {
 							color="danger"
 							type="default"
 							className="mt-4"
-							href="https://drive.google.com/file/d/1b67mHPlRMGWqF5YIx09bv-NYVbBsVsM1/view?usp=drive_link"
+							href="https://drive.google.com/file/d/1M9mJeBDJxrdVA1cpNuuGzF1xpZPpGi5h/view?usp=sharing"
 							target="_blank"
 							rel="noopener noreferrer"
 							icon={<FilePdfOutlined />}

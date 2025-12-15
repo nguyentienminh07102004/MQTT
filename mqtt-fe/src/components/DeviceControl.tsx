@@ -6,9 +6,10 @@ interface DeviceControlProps {
   deviceName: string;
   status: boolean;
   onToggle: (setLoading: () => void) => void;
+  count?: number;
 }
 
-const DeviceControl: React.FC<DeviceControlProps> = ({ deviceName, status, onToggle }) => {
+const DeviceControl: React.FC<DeviceControlProps> = ({ deviceName, status, onToggle, count = 0 }) => {
   const [loading, setLoading] = React.useState(false);
   return (
     <Card className="w-64">
@@ -19,6 +20,7 @@ const DeviceControl: React.FC<DeviceControlProps> = ({ deviceName, status, onTog
         </div>
 
         <p className="text-sm text-gray-500">Trạng thái: {status ? 'On' : 'Off'}</p>
+        <p className="text-sm text-gray-500">Số lần bật tắt: {count}</p>
       </div>
     </Card>
   )

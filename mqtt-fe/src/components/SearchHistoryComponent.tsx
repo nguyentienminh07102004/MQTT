@@ -49,6 +49,8 @@ export default function SearchHistoryComponent() {
 						<Option value="led">Đèn</Option>
 						<Option value="fan">Quạt</Option>
 						<Option value="air_conditioner">Điều hoà</Option>
+						<Option value="ring">Chuông</Option>
+						<Option value="door">Cửa</Option>
 					</Select>
 					<Select style={{ width: 200 }} value={sort} onChange={(value) => setSort(value as Sort)}>
 						<Option value="createdDate-Asc">Thời gian tăng dần</Option>
